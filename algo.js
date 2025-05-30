@@ -2,7 +2,7 @@
 const MUTATION_RATE = 0.1;
 const MUTATION_AMOUNT = 1;
 const GENERATIONS = 100;
-const POP_SIZE = 50;
+const POP_SIZE = 100;
 const TOP_N = 10;
 
 const cityGrid = [
