@@ -10,25 +10,35 @@
   </head>
   <body>
     <h1>Emergency Local Unit</h1>
-    <table id="cityTable"></table>
-    <canvas id="costChart" width="400" height="200"></canvas>
-    <table id="resultsTable" border="1" cellpadding="5">
-      <thead>
-        <tr>
-          <th>Generation</th>
-          <th>X</th>
-          <th>Y</th>
-          <th>Cost</th>
-          <th>Avg Response Time</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <br />
+    <main>
+      <div id="graph-container">
+        <p id="best-coord">Best Coordinate:</p>
+        <table id="cityTable"></table>
+
+        <canvas id="costChart" width="400" height="200"></canvas>
+      </div>
+
+      <div id="table-container">
+        <table id="resultsTable" border="1" cellpadding="5">
+          <thead>
+            <tr>
+              <th>Generation</th>
+              <th>X</th>
+              <th>Y</th>
+              <th>Cost</th>
+              <th>Avg Response Time</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
   </body>
 
   <script>
     const result = runGA();
-    displayCityTable(result); 
+    displayCityTable(result);
     displayGraph(result);
     displayTable(result);
 
@@ -36,6 +46,11 @@
       const best = result.bestLocation;
       const idealX = Math.floor(best.x);
       const idealY = Math.floor(best.y);
+      document.getElementById(
+        "best-coord"
+      ).textContent = `Best Coordinate: ${best.x.toFixed(2)}, ${best.y.toFixed(
+        2
+      )}`;
       const table = document.getElementById("cityTable");
 
       for (let row = 0; row < cityGrid.length; row++) {

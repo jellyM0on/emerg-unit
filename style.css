@@ -1,6 +1,8 @@
 body {
   font-family: monospace;
-  padding: 2rem;
+  padding: 1rem 2rem;
+  overflow: hidden;
+  height: 100vh;
 }
 
 table {
@@ -17,4 +19,17 @@ th {
   background-color: rgb(66, 184, 184);
   color: white;
   font-weight: bold;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: calc(100vh);
+}
+
+#table-container {
+  display: flex;
+  justify-content: center;
+  overflow-y: scroll;
+  max-height: 100%;
 }
