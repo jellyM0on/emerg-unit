@@ -149,9 +149,3 @@ function runGA({
     serviceLocations,
   };
 }
-
-const result = runGA();
-
-console.table(result.generationTable);
-console.log("Best location:", result.bestLocation);
-console.log("Minimum cost:", result.bestCost.toFixed(2));

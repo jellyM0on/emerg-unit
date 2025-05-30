@@ -4,7 +4,117 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Emergency Local Unit</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./algo.js"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body></body>
+  <body>
+    <h1>Emergency Local Unit</h1>
+    <table id="cityTable"></table>
+    <canvas id="costChart" width="400" height="200"></canvas>
+    <table id="resultsTable" border="1" cellpadding="5">
+      <thead>
+        <tr>
+          <th>Generation</th>
+          <th>X</th>
+          <th>Y</th>
+          <th>Cost</th>
+          <th>Avg Response Time</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+
+  <script>
+    const result = runGA();
+    displayCityTable(result); 
+    displayGraph(result);
+    displayTable(result);
+
+    function displayCityTable(result) {
+      const best = result.bestLocation;
+      const idealX = Math.floor(best.x);
+      const idealY = Math.floor(best.y);
+      const table = document.getElementById("cityTable");
+
+      for (let row = 0; row < cityGrid.length; row++) {
+        const tr = document.createElement("tr");
+
+        for (let col = 0; col < cityGrid[row].length; col++) {
+          const td = document.createElement("td");
+          td.textContent = cityGrid[row][col];
+
+          if (col === idealX && row === idealY) {
+            td.classList.add("highlight");
+          }
+
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+    }
+
+    function displayGraph(result) {
+      const generations = result.generationTable.map((row) => row.generation);
+      const costs = result.generationTable.map((row) => parseFloat(row.cost));
+
+      const ctx = document.getElementById("costChart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: generations,
+          datasets: [
+            {
+              label: "Cost per Generation",
+              data: costs,
+              borderColor: "rgba(75, 192, 192, 1)",
+              backgroundColor: "rgba(75, 192, 192, 0.1)",
+              borderWidth: 2,
+              fill: true,
+              tension: 0.2,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            x: {
+              title: { display: true, text: "Generation" },
+            },
+            y: {
+              title: { display: true, text: "Cost Value" },
+              beginAtZero: false,
+            },
+          },
+          plugins: {
+            legend: {
+              display: true,
+            },
+          },
+        },
+      });
+    }
+
+    function displayTable(result) {
+      const tableBody = document.querySelector("#resultsTable tbody");
+
+      result.generationTable.forEach((row) => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+    <td>${row.generation}</td>
+    <td>${row.x}</td>
+    <td>${row.y}</td>
+    <td>${row.cost}</td>
+    <td>${row.avgResponseTime}</td>
+  `;
+
+        tableBody.appendChild(tr);
+      });
+    }
+
+    console.table(result.generationTable);
+    console.log("Best location:", result.bestLocation);
+    console.log("Minimum cost:", result.bestCost.toFixed(2));
+  </script>
 </html>
