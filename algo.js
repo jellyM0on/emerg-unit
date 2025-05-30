@@ -56,10 +56,18 @@ function generateInitialPopulation(popSize) {
 }
 
 function selectCandidates(population, locations, topN) {
-  const evaluated = population.map((candidate) => ({
-    ...candidate,
-    cost: computeCost(candidate, locations),
-  }));
+  const evaluated = [];
+
+  for (let i = 0; i < population.length; i++) {
+    const candidate = population[i];
+    const cost = computeCost(candidate, locations);
+
+    evaluated.push({
+      x: candidate.x,
+      y: candidate.y,
+      cost: cost,
+    });
+  }
   evaluated.sort((a, b) => a.cost - b.cost);
   return evaluated.slice(0, topN);
 }
@@ -72,13 +80,22 @@ function crossover(p1, p2) {
 }
 
 function mutate(candidate, rate = MUTATION_RATE, amount = MUTATION_AMOUNT) {
+  let newX = candidate.x;
+  let newY = candidate.y;
+
+  if (Math.random() < rate) {
+    const changeX = (Math.random() * 2 - 1) * amount;
+    newX += changeX;
+  }
+
+  if (Math.random() < rate) {
+    const changeY = (Math.random() * 2 - 1) * amount;
+    newY += changeY;
+  }
+
   return {
-    x:
-      candidate.x +
-      (Math.random() < rate ? (Math.random() * 2 - 1) * amount : 0),
-    y:
-      candidate.y +
-      (Math.random() < rate ? (Math.random() * 2 - 1) * amount : 0),
+    x: newX,
+    y: newY,
   };
 }
 
